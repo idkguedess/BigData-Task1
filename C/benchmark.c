@@ -55,6 +55,10 @@ int main(int argc, char* argv[]) {
         double end_cpu = get_cpu_usage();
         long mem_after = get_memory_usage_kb();
 
+        double elapsed_time = end_time - start_time;
+        double cpu_used = end_cpu - start_cpu;
+        double mem_used_mb = (mem_after - mem_before) / 1024.0;
+
         printf("%d,%.6f,%.6f,%.2f\n", run + 1, elapsed_time, cpu_used, mem_used_mb);
         
         free_matrix(a, n);
