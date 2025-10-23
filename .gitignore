@@ -1,0 +1,10 @@
+.vscode/
+.idea/
+
+target/
+*.jar
+*.class
+
+pycache__/
+*.pyc
+
