@@ -2,12 +2,27 @@
 #include <stdlib.h>
 #include <time.h>
 #include <sys/time.h>
+#include <sys/resource.h>
 #include "matrix_multiply.h"
 
 double get_time() {
     struct timeval tv;
     gettimeofday(&tv, NULL);
     return tv.tv_sec + tv.tv_usec * 1e-6;
+}
+
+double get_cpu_usage() {
+    struct rusage usage;
+    getrusage(RUSAGE_SELF, &usage);
+    double user_time = usage.ru_utime.tv_sec + usage.ru_utime.tv_usec * 1e-6;
+    double sys_time = usage.ru_stime.tv_sec + usage.ru_stime.tv_usec * 1e-6;
+    return user_time + sys_time;
+}
+
+long get_memory_usage_kb() {
+    struct rusage usage;
+    getrusage(RUSAGE_SELF, &usage);
+    return usage.ru_maxrss;
 }
 
 int main(int argc, char* argv[]) {
@@ -22,7 +37,7 @@ int main(int argc, char* argv[]) {
     srand(42);
     
     printf("Matrix Size: %d, Runs: %d\n", n, num_runs);
-    printf("Run,Time(s)\n");
+    printf("Run,Time(s),CPU(s),Memory(MB)\n");
     
     for (int run = 0; run < num_runs; run++) {
         double** a = allocate_matrix(n);
@@ -32,11 +47,15 @@ int main(int argc, char* argv[]) {
         initialize_matrix(a, n);
         initialize_matrix(b, n);
         
-        double start = get_time();
+        double start_time = get_time();
+        double start_cpu = get_cpu_usage();
+        long mem_before = get_memory_usage_kb();
         multiply_matrices(a, b, c, n);
-        double end = get_time();
-        
-        printf("%d,%.6f\n", run + 1, end - start);
+        double end_time = get_time();
+        double end_cpu = get_cpu_usage();
+        long mem_after = get_memory_usage_kb();
+
+        printf("%d,%.6f,%.6f,%.2f\n", run + 1, elapsed_time, cpu_used, mem_used_mb);
         
         free_matrix(a, n);
         free_matrix(b, n);
