@@ -3,7 +3,6 @@ from .matrix_multiply import allocate_matrix, initialize_matrix, multiply_matric
 
 def run_benchmark(n: int, num_runs: int):
     """Run matrix multiplication benchmark."""
-    print(f"Matrix Size: {n}, Runs: {num_runs}")
     print("Run,Time(s)")
     
     for run in range(num_runs):
