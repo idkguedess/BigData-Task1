@@ -36,7 +36,6 @@ int main(int argc, char* argv[]) {
     
     srand(42);
     
-    printf("Matrix Size: %d, Runs: %d\n", n, num_runs);
     printf("Run,Time(s),CPU(s),Memory(MB)\n");
     
     for (int run = 0; run < num_runs; run++) {
@@ -59,7 +58,7 @@ int main(int argc, char* argv[]) {
         double cpu_used = end_cpu - start_cpu;
         double mem_used_mb = (mem_after - mem_before) / 1024.0;
 
-        printf("%d,%.6f,%.6f,%.2f\n", run + 1, elapsed_time, cpu_used, mem_used_mb);
+        printf("%d,%.6f,%.4f,%.2f\n", run + 1, elapsed_time, cpu_used*100, mem_used_mb);
         
         free_matrix(a, n);
         free_matrix(b, n);
